@@ -57,8 +57,6 @@ app.delete('/api/v1/item/:id', (req, res) => {
         const deleted = todoList.splice(index, 1); // indexの位置にある項目を削除
         console.log('Delete: ' + JSON.stringify(deleted[0]));
     }
-
-    // ステータスコード200:OKを送信
     res.sendStatus(200);
 });
 
