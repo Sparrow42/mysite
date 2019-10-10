@@ -1,8 +1,7 @@
-const express = require('express')
+const express = require('express');
 const app = express(); 
-app.get('/', (req, res) => res.send('Hello')); 
-//httpのget,post,（パス、）
-//function f (hikisu) {syori}
-//=> const f = (hikisuu) => {syori}, 
+const addModule = require('./04_add.js');
 
+app.get('/', (req, res) => res.send('Hello')); 
+addModule.add(app, express);
 app.listen(3000, function() { console.log('Listening on port 3000')} );
