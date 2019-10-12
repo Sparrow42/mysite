@@ -62,5 +62,4 @@ app.delete('/api/v1/item/:id', (req, res) => {
     res.sendStatus(200);
 });
 
-// ポート3000でサーバを立てる
 app.listen(3000, () => console.log('Listening on port 3000'));
