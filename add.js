@@ -35,7 +35,7 @@ exports.add = function(app, express) {
 	    // TODOリストに項目を追加する
 	    todoList.push(todoItem);
 
-	    // コンソールに出力する
+	    // コンソールに出力
 	    console.log('Add: ' + JSON.stringify(todoItem));
 
 	    // 追加した項目をクライアントに返す
