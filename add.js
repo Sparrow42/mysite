@@ -1,0 +1,44 @@
+const multer = require('multer'); // multerモジュールを読み込む
+const uuidv4 = require('uuid/v4'); // uuidモジュールを読み込む
+
+exports.add = function(app, express) {
+	app.use(multer().none()); // multerでブラウザから送信されたデータを解釈する
+	app.use(express.static('web')); // webフォルダの中身を公開する
+
+	// TODOリストデータ
+	const todoList = [];
+
+	// http://localhost:3000/api/list にアクセスしてきたときに
+	// TODOリストを返す
+	app.get('/api/list', (req, res) => {
+	    // JSONを送信する
+	    res.json(todoList);
+	});
+
+	// http://localhost:3000/api/add にデータを送信してきたときに
+	// TODOリストに項目を追加する
+	app.post('/api/add', (req, res) => {
+	    // クライアントからの送信データを取得する
+	    const todoData = req.body;
+	    const todoTitle = todoData.title;
+   
+	    // ユニークIDを生成する
+	    const id = uuidv4();
+
+	    // TODO項目を作る
+	    const todoItem = {
+	        id,
+	        title: todoTitle,
+	        done: false
+	    };
+
+	    // TODOリストに項目を追加する
+	    todoList.push(todoItem);
+
+	    // コンソールに出力
+	    console.log('Add: ' + JSON.stringify(todoItem));
+
+	    // 追加した項目をクライアントに返す
+	    res.json(todoItem);
+	});
+};
