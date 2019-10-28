@@ -1,90 +1,150 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
-    <meta charset="UTF-8">
-    <title>TODOリスト</title>
-    <style>
-        html {
-            background-color: rgb(240, 240, 240);
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>todo</title>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
+
 <body>
-    <h1>TODO List</h1>
-    <div>
-        <ul id="todo-container"></ul>
-        <input id="new-todo-item-title"><button id="new-todo-item-add-button">Add</button>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">バン君のTODO</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">TODO <span class="sr-only">(current)</span></a>
+        </li>
+      </ul>
     </div>
+  </nav>
 
-    <script>
-        // TODOリストを描画する関数
-        function renderTodoList(todoList) {
-            // id="todo-container"要素を取得する
-            const todoContainer = document.querySelector('#todo-container');
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-md-2">
+        <div class="list-group decomplete-list mb-3">
+          <p class="list-group-item list-group-item-action active">未達成</p>
+        </div>
+        <div class="list-group complete-list">
+          <p class="list-group-item list-group-item-action active">達成済み</p>
+        </div>
+      </div>
 
-            // コンテナの中身を全部消す
-            todoContainer.innerHTML = '';
+      <div class="col-12 col-md-10">
+        <div class="row" id="todos">
 
-            // JSONの各要素に対して
-            for(const item of todoList) {
-                const li = document.createElement('li');          // リスト要素
-                const label = document.createElement('label');    // ラベル
-                const checkbox = document.createElement('input'); // チェックボックス
-                checkbox.type = 'checkbox';
-                checkbox.checked = item.done;                     // 項目がdoneならチェック
-                const text = new Text(item.title);                // 項目名
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="card text-center">
+              <div class="card-body">
+                <button
+                  type="button" class="btn btn-primary btn-lg"
+                  data-toggle="modal" data-target="#exampleModal">
+                  新規作成
+                </button>
+              </div>
+            </div>
+          </div>
 
-                // ラベルにチェックボックスとテキストを追加する
-                label.appendChild(checkbox);
-                label.appendChild(text);
+        </div>
+      </div>
+    </div>
+  </div>
 
-                // リスト要素に先ほどのラベルを追加する
-                li.appendChild(label);
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">新規TODO</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form class="was-validated">
+            <div class="form-group">
+              <label for="new-title" class="col-form-label">タイトル:</label>
+              <input type="text" class="form-control is-invalid" id="new-title" required>
+            </div>
+            <div class="form-group">
+              <label for="new-body" class="col-form-label">内容:</label>
+              <textarea class="form-control is-invalid" id="new-body" required></textarea>
+            </div>
+            <div class="form-group">
+              <label for="new-date" class="col-form-label">締め切り:</label>
+              <input type="date" class="form-control is-invalid" id="new-date" required></input>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">閉じる</button>
+          <button type="button" class="btn btn-primary" type="submit">作成</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-                // TODOリストにリスト要素を追加する
-                todoContainer.appendChild(li);
-            }
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $.get( 'https://localhost:3000/api/get-alltodos' )
+      .done(function(data) {
+        for (var i in data) {
+
+          if (!data.complete) {
+            $('.decomplete-list').append(`<a href="#${data.id}" class="list-group-item list-group-item-action">${data.title}</a>`);
+            $('#todos').append(`
+            <div class="col-12 col-md-6 col-lg-4">
+              <div id="${data.id}" class="card text-center todo">
+                <div class="card-header">
+                  TODO
+                </div>
+                <div class="card-body">
+                  <h5 class="card-title">${data.title}</h5>
+                  <p class="card-text">${data.body}</p>
+                  <a href="#" class="btn btn-primary complete">完了する</a>
+                </div>
+                <div class="card-footer text-muted">
+                  締め切り : ${data.date}
+                </div>
+              </div>
+            </div>
+            `)
+          } else() {
+            $('.complete-list').append(`<a href="#${data.id}" class="list-group-item list-group-item-action">${data.title}</a>`);
+          };
         }
+      })
+      .fail( function(err) {
+        console.log(err)
+      })
+    });
 
-        // APIからTODOリストを取得して描画する関数
-        async function fetchTodoList() {
-            // APIからJSONを取得する
-            return fetch('./api/v1/list')
-                .then((response) => response.json())
-                .then((todoList) => {
-                    renderTodoList(todoList);
-                })
-        }
+    $('.complete').click(function(){
+      var id = $(this).parent().attr('id');
+      $.post( 'https://localhost:3000/api/post-complete', { id: id });
+    });
 
-        // APIに新しいTODOアイテムをPOSTする関数
-        async function postNewTodoItem(todoItem) {
-            // 送信データ'title'にタイトルテキストを追加する
-            const body = new FormData();
-            body.append('title', todoItem.title);
-
-            // Fetch APIを使って、Web APIにPOSTでデータを送信する
-            return fetch('./api/v1/add', {
-                method: 'POST', // POSTメソッドで送信する,
-                body
-            }).then((response) => response.json());
-        }
-
-        const newTodoItemTitleInput = document.querySelector('#new-todo-item-title');
-        const newTodoAddButton = document.querySelector('#new-todo-item-add-button');
-
-        // Addボタンをクリックしたときに新しいTODO項目をPOSTする
-        newTodoAddButton.addEventListener('click', (event) => {
-            const title = newTodoItemTitleInput.value;
-
-            // タイトルが空でなければ
-            if(title) {
-                // 項目をPOSTしたあとにリストを更新する
-                postNewTodoItem({title}).then((item) => fetchTodoList());
-            }
+    $('#exampleModal').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget);
+      var modal = $(this);
+      modal.submit( function(){
+        event.preventDefault();
+        $.post( 'https://localhost:3000/api/post-hogehoge', {
+          title: $('#new-title'),
+          body: $('#new-body'),
+          date: $('#new-date')
         });
-
-        // 初回データ読み込み
-        fetchTodoList();
-    </script>
+      });
+    });
+  </script>
 </body>
+
 </html>
